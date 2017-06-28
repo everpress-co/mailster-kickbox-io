@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Mailster Kickbox IO
-Plugin URI: http://rxa.li/mailster?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration
+Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration
 Description: Verifies your subscribers email addresses with kickbox.io
 Version: 1.0
-Author: revaxarts.com
+Author: EverPress
 Author URI: https://mailster.co
 Text Domain: mailster-kickboxio
 License: GPLv2 or later
@@ -280,7 +280,7 @@ foreach ( $reasons as $code => $reason ) {
 	?>
 	<div id="message" class="error">
 	  <p>
-	   <strong>Kickbox.io for Mailster</strong> requires the <a href="http://rxa.li/mailster?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_KICKBOXIO_REQUIRED_VERSION ?></strong>. Plugin deactivated.
+	   <strong>Kickbox.io for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_KICKBOXIO_REQUIRED_VERSION ?></strong>. Plugin deactivated.
 	  </p>
 	</div>
 		<?php
