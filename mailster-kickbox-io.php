@@ -22,7 +22,7 @@ class MailsterKickBoxIO {
 	public function __construct() {
 
 		$this->plugin_path = plugin_dir_path( __FILE__ );
-		$this->plugin_url = plugin_dir_url( __FILE__ );
+		$this->plugin_url  = plugin_dir_url( __FILE__ );
 
 		register_activation_hook( __FILE__, array( &$this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( &$this, 'deactivate' ) );
@@ -39,16 +39,16 @@ class MailsterKickBoxIO {
 			mailster_notice( sprintf( __( 'Define your kickbox.io options on the %s!', 'mailster-kickboxio' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=kickboxio#kickboxio">Settings Page</a>' ), '', false, 'kickboxio' );
 
 			$defaults = array(
-				'kickboxio_timeout' => 6000,
-				'kickboxio_response' => array( 'deliverable', 'risky', 'unknown' ),
-				'kickboxio_reasons' => array( 'invalid_domain', 'rejected_email' ),
-				'kickboxio_role' => true,
-				'kickboxio_free' => true,
-				'kickboxio_accept_all' => true,
+				'kickboxio_timeout'        => 6000,
+				'kickboxio_response'       => array( 'deliverable', 'risky', 'unknown' ),
+				'kickboxio_reasons'        => array( 'invalid_domain', 'rejected_email' ),
+				'kickboxio_role'           => true,
+				'kickboxio_free'           => true,
+				'kickboxio_accept_all'     => true,
 				'kickboxio_response_error' => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
-				'kickboxio_reasons_error' => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
-				'kickboxio_error' => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
-				'kickboxio_sendex' => 0.4,
+				'kickboxio_reasons_error'  => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
+				'kickboxio_error'          => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
+				'kickboxio_sendex'         => 0.4,
 			);
 
 			$mailster_options = mailster_options();
@@ -108,18 +108,24 @@ class MailsterKickBoxIO {
 
 		$endpoint = 'https://api.kickbox.io/v2/verify';
 
-		$url = add_query_arg(array(
-			'email' => urlencode( $email ),
-			'apikey' => mailster_option( 'kickboxio_apikey' ),
-			'timeout' => mailster_option( 'kickboxio_timeout' ),
-		), $endpoint);
+		$url = add_query_arg(
+			array(
+				'email'   => urlencode( $email ),
+				'apikey'  => mailster_option( 'kickboxio_apikey' ),
+				'timeout' => mailster_option( 'kickboxio_timeout' ),
+			),
+			$endpoint
+		);
 
-		$response = wp_remote_get( $url, array(
-			'timeout' => (mailster_option( 'kickboxio_timeout' ) / 1000) + 3,
-		) );
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout' => ( mailster_option( 'kickboxio_timeout' ) / 1000 ) + 3,
+			)
+		);
 
-		$code = wp_remote_retrieve_response_code( $response );
-		$body = wp_remote_retrieve_body( $response );
+		$code    = wp_remote_retrieve_response_code( $response );
+		$body    = wp_remote_retrieve_body( $response );
 		$headers = wp_remote_retrieve_headers( $response );
 
 		if ( isset( $headers['x-kickbox-balance'] ) ) {
@@ -181,25 +187,25 @@ class MailsterKickBoxIO {
 
 	public function settings() {
 
-?>
+		?>
 	<table class="form-table">
 		<tr valign="top">
-			<th scope="row"><?php _e( 'API Key' ,'mailster_kickboxoi' ) ?></th>
-			<td><p><input type="text" name="mailster_options[kickboxio_apikey]" value="<?php echo esc_attr( mailster_option( 'kickboxio_apikey' ) ) ?>" class="large-text"></p></td>
+			<th scope="row"><?php _e( 'API Key', 'mailster_kickboxoi' ); ?></th>
+			<td><p><input type="text" name="mailster_options[kickboxio_apikey]" value="<?php echo esc_attr( mailster_option( 'kickboxio_apikey' ) ); ?>" class="large-text"></p></td>
 		</tr>
 		<?php if ( null != mailster_option( 'kickboxio_balance' ) ) : ?>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Balance' ,'mailster_kickboxoi' ) ?></th>
-			<td><input type="hidden" name="mailster_options[kickboxio_balance]" value="<?php echo esc_attr( mailster_option( 'kickboxio_balance' ) ) ?>"><p><?php echo sprintf( __( 'You have %d credits left', 'mailster-kickboxio' ), mailster_option( 'kickboxio_balance' ) ) ?></p></td>
+			<th scope="row"><?php _e( 'Balance', 'mailster_kickboxoi' ); ?></th>
+			<td><input type="hidden" name="mailster_options[kickboxio_balance]" value="<?php echo esc_attr( mailster_option( 'kickboxio_balance' ) ); ?>"><p><?php echo sprintf( __( 'You have %d credits left', 'mailster-kickboxio' ), mailster_option( 'kickboxio_balance' ) ); ?></p></td>
 		</tr>
 		<?php endif; ?>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Timeout' ,'mailster_kickboxoi' ) ?></th>
-			<td><p><input type="text" name="mailster_options[kickboxio_timeout]" value="<?php echo esc_attr( mailster_option( 'kickboxio_timeout' ) ) ?>" class="small-text"> Milliseconds</p></td>
+			<th scope="row"><?php _e( 'Timeout', 'mailster_kickboxoi' ); ?></th>
+			<td><p><input type="text" name="mailster_options[kickboxio_timeout]" value="<?php echo esc_attr( mailster_option( 'kickboxio_timeout' ) ); ?>" class="small-text"> Milliseconds</p></td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Import' ,'mailster_kickboxoi' ) ?></th>
-			<td><p><label><input type="hidden" name="mailster_options[kickboxio_import]" value=""><input type="checkbox" name="mailster_options[kickboxio_import]" value="1" <?php checked( mailster_option( 'kickboxio_import' ) ) ?>> use for import</label></p>
+			<th scope="row"><?php _e( 'Import', 'mailster_kickboxoi' ); ?></th>
+			<td><p><label><input type="hidden" name="mailster_options[kickboxio_import]" value=""><input type="checkbox" name="mailster_options[kickboxio_import]" value="1" <?php checked( mailster_option( 'kickboxio_import' ) ); ?>> use for import</label></p>
 			<p class="description">This will significantly decrease import time because for every subscriber WordPress needs to verify the email on the kickbox.io server. It's better to use the <a href="https://kickbox.io/app/verify" class="external">list verification</a> to verify large lists.</p>
 				</td>
 		</tr>
@@ -209,78 +215,78 @@ class MailsterKickBoxIO {
 	<p class="description">By default the given options are fine and can be kept. If you have special needs feel free to adopt them.</p>
 	<table class="form-table">
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Accept email if response is' ,'mailster_kickboxoi' ) ?></th>
+			<th scope="row"><?php _e( 'Accept email if response is', 'mailster_kickboxoi' ); ?></th>
 			<td>
-<?php
+		<?php
 		$reasons = array(
-			'deliverable' => 'deliverable',
+			'deliverable'   => 'deliverable',
 			'undeliverable' => 'undeliverable',
-			'risky' => 'risky',
-			'unknown' => 'unknown',
+			'risky'         => 'risky',
+			'unknown'       => 'unknown',
 		);
 
 		$checked = mailster_option( 'kickboxio_response', array() );
-foreach ( $reasons as $code => $reason ) {
-	echo '<p><label><input type="checkbox" name="mailster_options[kickboxio_response][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
-}
-?>
-			<p><strong><?php _e( 'Error Message if rule doesn\'t match' ,'mailster_kickboxoi' ) ?></strong>
-			<input type="text" name="mailster_options[kickboxio_response_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_response_error' ) ) ?>" class="large-text"></p>
+		foreach ( $reasons as $code => $reason ) {
+			echo '<p><label><input type="checkbox" name="mailster_options[kickboxio_response][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
+		}
+		?>
+			<p><strong><?php _e( 'Error Message if rule doesn\'t match', 'mailster_kickboxoi' ); ?></strong>
+			<input type="text" name="mailster_options[kickboxio_response_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_response_error' ) ); ?>" class="large-text"></p>
 			</td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Reject email if reason is' ,'mailster_kickboxoi' ) ?></th>
+			<th scope="row"><?php _e( 'Reject email if reason is', 'mailster_kickboxoi' ); ?></th>
 			<td>
-<?php
+		<?php
 
 		$reasons = array(
 			// 'invalid_email' => 'Specified email is not a valid email address syntax',
-			'invalid_domain' => 'Domain for email does not exist',
-			'rejected_email' => 'Email address was rejected by the SMTP server, email address does not exist',
-			'accepted_email' => 'Email address was accepted by the SMTP server',
-			'low_quality' => 'Email address has quality issues that may make it a risky or low-value address',
+			'invalid_domain'     => 'Domain for email does not exist',
+			'rejected_email'     => 'Email address was rejected by the SMTP server, email address does not exist',
+			'accepted_email'     => 'Email address was accepted by the SMTP server',
+			'low_quality'        => 'Email address has quality issues that may make it a risky or low-value address',
 			'low_deliverability' => 'Email address appears to be deliverable, but deliverability cannot be guaranteed',
-			'no_connect' => 'Could not connect to SMTP server',
-			'timeout' => 'SMTP session timed out',
-			'invalid_smtp' => 'SMTP server returned an unexpected/invalid response',
-			'unavailable_smtp' => 'SMTP server was unavailable to process our request',
-			'unexpected_error' => 'An unexpected error has occurred',
+			'no_connect'         => 'Could not connect to SMTP server',
+			'timeout'            => 'SMTP session timed out',
+			'invalid_smtp'       => 'SMTP server returned an unexpected/invalid response',
+			'unavailable_smtp'   => 'SMTP server was unavailable to process our request',
+			'unexpected_error'   => 'An unexpected error has occurred',
 		);
 
 		$checked = mailster_option( 'kickboxio_reasons', array() );
-foreach ( $reasons as $code => $reason ) {
-	echo '<p><label><input type="checkbox" name="mailster_options[kickboxio_reasons][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
-}
-?>
-			<p><strong><?php _e( 'Error Message if rule doesn\'t match' ,'mailster_kickboxoi' ) ?></strong>
-			<input type="text" name="mailster_options[kickboxio_reasons_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_reasons_error' ) ) ?>" class="large-text"></p>
+		foreach ( $reasons as $code => $reason ) {
+			echo '<p><label><input type="checkbox" name="mailster_options[kickboxio_reasons][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
+		}
+		?>
+			<p><strong><?php _e( 'Error Message if rule doesn\'t match', 'mailster_kickboxoi' ); ?></strong>
+			<input type="text" name="mailster_options[kickboxio_reasons_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_reasons_error' ) ); ?>" class="large-text"></p>
 			</td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Accept email address if' ,'mailster_kickboxoi' ) ?></th>
+			<th scope="row"><?php _e( 'Accept email address if', 'mailster_kickboxoi' ); ?></th>
 			<td>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_role]" value="1" <?php checked( mailster_option( 'kickboxio_role' ) ) ?>> is a role address (postmaster@example.com, support@example.com, etc)</label></p>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_free]" value="1" <?php checked( mailster_option( 'kickboxio_free' ) ) ?>> uses a free email service like gmail.com or yahoo.com.</label></p>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_disposable]" value="1" <?php checked( mailster_option( 'kickboxio_disposable' ) ) ?>> uses a disposable domain like trashmail.com or mailinator.com.</label></p>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_accept_all]" value="1" <?php checked( mailster_option( 'kickboxio_accept_all' ) ) ?>>was accepted, but the domain appears to accept all emails addressed to that domain</label></p>
-			<p><a href="http://docs.kickbox.io/v2.0/docs/the-sendex" class="external">Sendex score</a> is at least<input type="text" name="mailster_options[kickboxio_sendex]" value="<?php echo floatval( mailster_option( 'kickboxio_sendex' ) ) ?>" class="small-text"></p>
+			<p><label><input type="checkbox" name="mailster_options[kickboxio_role]" value="1" <?php checked( mailster_option( 'kickboxio_role' ) ); ?>> is a role address (postmaster@example.com, support@example.com, etc)</label></p>
+			<p><label><input type="checkbox" name="mailster_options[kickboxio_free]" value="1" <?php checked( mailster_option( 'kickboxio_free' ) ); ?>> uses a free email service like gmail.com or yahoo.com.</label></p>
+			<p><label><input type="checkbox" name="mailster_options[kickboxio_disposable]" value="1" <?php checked( mailster_option( 'kickboxio_disposable' ) ); ?>> uses a disposable domain like trashmail.com or mailinator.com.</label></p>
+			<p><label><input type="checkbox" name="mailster_options[kickboxio_accept_all]" value="1" <?php checked( mailster_option( 'kickboxio_accept_all' ) ); ?>>was accepted, but the domain appears to accept all emails addressed to that domain</label></p>
+			<p><a href="http://docs.kickbox.io/v2.0/docs/the-sendex" class="external">Sendex score</a> is at least<input type="text" name="mailster_options[kickboxio_sendex]" value="<?php echo floatval( mailster_option( 'kickboxio_sendex' ) ); ?>" class="small-text"></p>
 
-			<p><strong><?php _e( 'Error Message if rule doesn\'t match' ,'mailster_kickboxoi' ) ?></strong>
-			<input type="text" name="mailster_options[kickboxio_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_error' ) ) ?>" class="large-text"></p>
+			<p><strong><?php _e( 'Error Message if rule doesn\'t match', 'mailster_kickboxoi' ); ?></strong>
+			<input type="text" name="mailster_options[kickboxio_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_error' ) ); ?>" class="large-text"></p>
 			</td>
 			</td>
 		</tr>
 	</table>
 
-<?php
+		<?php
 	}
 
 
 	public function notice() {
-	?>
+		?>
 	<div id="message" class="error">
 	  <p>
-	   <strong>Kickbox.io for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_KICKBOXIO_REQUIRED_VERSION ?></strong>. Plugin deactivated.
+	   <strong>Kickbox.io for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_KICKBOXIO_REQUIRED_VERSION; ?></strong>. Plugin deactivated.
 	  </p>
 	</div>
 		<?php

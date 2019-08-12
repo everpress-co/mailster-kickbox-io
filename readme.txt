@@ -1,8 +1,8 @@
 === Mailster Kickbox IO ===
-Contributors: everpress, revaxarts
+Contributors: everpress
 Tags: mailster, newsletter, email, verification, kickbox
 Requires at least: 3.8
-Tested up to: 5.0
+Tested up to: 5.2
 Stable tag: 1.0
 License: GPLv2 or later
 Author: EverPress
