@@ -2,7 +2,7 @@
 Contributors: everpress
 Tags: mailster, newsletter, email, verification, kickbox
 Requires at least: 3.8
-Tested up to: 5.2
+Tested up to: 5.3
 Stable tag: 1.0
 License: GPLv2 or later
 Author: EverPress
@@ -12,7 +12,7 @@ Author URI: https://mailster.co
 
 Verifies your subscribers email addresses with kickbox.io
 
-> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration) and an account at [Kickbox.io](https://kickbox.io)
+> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration&utm_medium=readme) and an account at [Kickbox.io](https://kickbox.io)
 
 == Installation ==
 
@@ -26,7 +26,7 @@ Verifies your subscribers email addresses with kickbox.io
 = 1.0 =
 * initial release
 
-== Additional Info One ==
+== Additional Info ==
 
-This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration) and an account at [Kickbox.io](https://kickbox.io)
+This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration&utm_medium=readme) and an account at [Kickbox.io](https://kickbox.io)
 
