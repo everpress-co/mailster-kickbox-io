@@ -1,18 +1,18 @@
 <?php
 /*
-Plugin Name: Mailster Kickbox IO
-Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration&utm_medium=plugin
-Description: Verifies your subscribers email addresses with kickbox.io
-Version: 1.0
+Plugin Name: Mailster Kickbox
+Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox+Integration&utm_medium=plugin
+Description: Verifies your subscribers email addresses with Kickbox
+Version: 1.1
 Author: EverPress
 Author URI: https://mailster.co
-Text Domain: mailster-kickboxio
+Text Domain: mailster-kickbox
 License: GPLv2 or later
 */
 
 
-define( 'MAILSTER_KICKBOXIO_VERSION', '1.0' );
-define( 'MAILSTER_KICKBOXIO_REQUIRED_VERSION', '2.2' );
+define( 'MAILSTER_KICKBOX_VERSION', '1.1' );
+define( 'MAILSTER_KICKBOX_REQUIRED_VERSION', '2.2' );
 
 class MailsterKickBoxIO {
 
@@ -27,7 +27,7 @@ class MailsterKickBoxIO {
 		register_activation_hook( __FILE__, array( &$this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( &$this, 'deactivate' ) );
 
-		load_plugin_textdomain( 'mailster-kickboxio' );
+		load_plugin_textdomain( 'mailster-kickbox' );
 
 		add_action( 'init', array( &$this, 'init' ), 1 );
 	}
@@ -36,19 +36,19 @@ class MailsterKickBoxIO {
 
 		if ( function_exists( 'mailster' ) ) {
 
-			mailster_notice( sprintf( __( 'Define your kickbox.io options on the %s!', 'mailster-kickboxio' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=kickboxio#kickboxio">Settings Page</a>' ), '', false, 'kickboxio' );
+			mailster_notice( sprintf( __( 'Define your Kickbox options on the %s!', 'mailster-kickbox' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=kickbox#kickbox">Settings Page</a>' ), '', false, 'kickbox' );
 
 			$defaults = array(
-				'kickboxio_timeout'        => 6000,
-				'kickboxio_response'       => array( 'deliverable', 'risky', 'unknown' ),
-				'kickboxio_reasons'        => array( 'invalid_domain', 'rejected_email' ),
-				'kickboxio_role'           => true,
-				'kickboxio_free'           => true,
-				'kickboxio_accept_all'     => true,
-				'kickboxio_response_error' => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
-				'kickboxio_reasons_error'  => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
-				'kickboxio_error'          => __( 'Sorry, your email address is not accepted!', 'mailster-kickboxio' ),
-				'kickboxio_sendex'         => 0.4,
+				'kickbox_timeout'        => 6000,
+				'kickbox_response'       => array( 'deliverable', 'risky', 'unknown' ),
+				'kickbox_reasons'        => array( 'invalid_domain', 'rejected_email' ),
+				'kickbox_role'           => true,
+				'kickbox_free'           => true,
+				'kickbox_accept_all'     => true,
+				'kickbox_response_error' => __( 'Sorry, your email address is not accepted!', 'mailster-kickbox' ),
+				'kickbox_reasons_error'  => __( 'Sorry, your email address is not accepted!', 'mailster-kickbox' ),
+				'kickbox_error'          => __( 'Sorry, your email address is not accepted!', 'mailster-kickbox' ),
+				'kickbox_sendex'         => 0.4,
 			);
 
 			$mailster_options = mailster_options();
@@ -76,7 +76,7 @@ class MailsterKickBoxIO {
 			if ( is_admin() ) {
 
 				add_filter( 'mailster_setting_sections', array( &$this, 'settings_tab' ) );
-				add_action( 'mailster_section_tab_kickboxio', array( &$this, 'settings' ) );
+				add_action( 'mailster_section_tab_kickbox', array( &$this, 'settings' ) );
 
 			}
 
@@ -91,7 +91,7 @@ class MailsterKickBoxIO {
 		if ( ! isset( $entry['email'] ) ) {
 			return $entry;
 		}
-		if ( ! mailster_option( 'kickboxio_import' ) && defined( 'MAILSTER_DO_BULKIMPORT' ) && MAILSTER_DO_BULKIMPORT ) {
+		if ( ! mailster_option( 'kickbox_import' ) && defined( 'MAILSTER_DO_BULKIMPORT' ) && MAILSTER_DO_BULKIMPORT ) {
 			return $entry;
 		}
 
@@ -106,13 +106,13 @@ class MailsterKickBoxIO {
 
 	public function verify( $email ) {
 
-		$endpoint = 'https://api.kickbox.io/v2/verify';
+		$endpoint = 'https://api.kickbox.com/v2/verify';
 
 		$url = add_query_arg(
 			array(
 				'email'   => urlencode( $email ),
-				'apikey'  => mailster_option( 'kickboxio_apikey' ),
-				'timeout' => mailster_option( 'kickboxio_timeout' ),
+				'apikey'  => mailster_option( 'kickbox_apikey' ),
+				'timeout' => mailster_option( 'kickbox_timeout' ),
 			),
 			$endpoint
 		);
@@ -120,7 +120,7 @@ class MailsterKickBoxIO {
 		$response = wp_remote_get(
 			$url,
 			array(
-				'timeout' => ( mailster_option( 'kickboxio_timeout' ) / 1000 ) + 3,
+				'timeout' => ( mailster_option( 'kickbox_timeout' ) / 1000 ) + 3,
 			)
 		);
 
@@ -129,45 +129,45 @@ class MailsterKickBoxIO {
 		$headers = wp_remote_retrieve_headers( $response );
 
 		if ( isset( $headers['x-kickbox-balance'] ) ) {
-			mailster_update_option( 'kickboxio_balance', $headers['x-kickbox-balance'] );
+			mailster_update_option( 'kickbox_balance', $headers['x-kickbox-balance'] );
 		}
 
 		$result = json_decode( $body );
 
 		if ( ! $result->success ) {
-			mailster_notice( '<strong>' . sprintf( __( 'There was an error while verifying an email address via kickbox.io: %s', 'mailster_kickboxoi' ), $result->message ) . '</strong>', 'error', false, 'kickboxioerror' );
+			mailster_notice( '<strong>' . sprintf( __( 'There was an error while verifying an email address via kickbox.com: %s', 'mailster_kickboxoi' ), $result->message ) . '</strong>', 'error', false, 'kickboxerror' );
 			return true;
 		}
 
 		// general acceptation
-		if ( ! in_array( $result->result, mailster_option( 'kickboxio_response', array() ) ) ) {
-			return new WP_Error( 'kickboxio_response', mailster_option( 'kickboxio_response_error' ), 'email' );
+		if ( ! in_array( $result->result, mailster_option( 'kickbox_response', array() ) ) ) {
+			return new WP_Error( 'kickbox_response', mailster_option( 'kickbox_response_error' ), 'email' );
 		}
 
 		// reasons specific rejection
-		if ( in_array( $result->reason, mailster_option( 'kickboxio_reasons', array() ) ) ) {
-			return new WP_Error( 'kickboxio_reasons', mailster_option( 'kickboxio_reasons_error' ), 'email' );
+		if ( in_array( $result->reason, mailster_option( 'kickbox_reasons', array() ) ) ) {
+			return new WP_Error( 'kickbox_reasons', mailster_option( 'kickbox_reasons_error' ), 'email' );
 		}
 
 		// special rejections
-		if ( $result->role && ! mailster_option( 'kickboxio_role' ) ) {
-			return new WP_Error( 'kickboxio_role', mailster_option( 'kickboxio_error' ), 'email' );
+		if ( $result->role && ! mailster_option( 'kickbox_role' ) ) {
+			return new WP_Error( 'kickbox_role', mailster_option( 'kickbox_error' ), 'email' );
 		}
 
-		if ( $result->free && ! mailster_option( 'kickboxio_free' ) ) {
-			return new WP_Error( 'kickboxio_free', mailster_option( 'kickboxio_error' ), 'email' );
+		if ( $result->free && ! mailster_option( 'kickbox_free' ) ) {
+			return new WP_Error( 'kickbox_free', mailster_option( 'kickbox_error' ), 'email' );
 		}
 
-		if ( $result->disposable && ! mailster_option( 'kickboxio_disposable' ) ) {
-			return new WP_Error( 'kickboxio_disposable', mailster_option( 'kickboxio_error' ), 'email' );
+		if ( $result->disposable && ! mailster_option( 'kickbox_disposable' ) ) {
+			return new WP_Error( 'kickbox_disposable', mailster_option( 'kickbox_error' ), 'email' );
 		}
 
-		if ( $result->accept_all && ! mailster_option( 'kickboxio_accept_all' ) ) {
-			return new WP_Error( 'kickboxio_accept_all', mailster_option( 'kickboxio_error' ), 'email' );
+		if ( $result->accept_all && ! mailster_option( 'kickbox_accept_all' ) ) {
+			return new WP_Error( 'kickbox_accept_all', mailster_option( 'kickbox_error' ), 'email' );
 		}
 
-		if ( $result->sendex < mailster_option( 'kickboxio_sendex' ) ) {
-			return new WP_Error( 'kickboxio_sendex', mailster_option( 'kickboxio_error' ), 'email' );
+		if ( $result->sendex < mailster_option( 'kickbox_sendex' ) ) {
+			return new WP_Error( 'kickbox_sendex', mailster_option( 'kickbox_error' ), 'email' );
 		}
 
 		return true;
@@ -178,7 +178,7 @@ class MailsterKickBoxIO {
 
 		$position = 3;
 		$settings = array_slice( $settings, 0, $position, true ) +
-					array( 'kickboxio' => 'Kickbox.io' ) +
+					array( 'kickbox' => 'Kickbox' ) +
 					array_slice( $settings, $position, null, true );
 
 		return $settings;
@@ -191,27 +191,27 @@ class MailsterKickBoxIO {
 	<table class="form-table">
 		<tr valign="top">
 			<th scope="row"><?php _e( 'API Key', 'mailster_kickboxoi' ); ?></th>
-			<td><p><input type="text" name="mailster_options[kickboxio_apikey]" value="<?php echo esc_attr( mailster_option( 'kickboxio_apikey' ) ); ?>" class="large-text"></p></td>
+			<td><p><input type="text" name="mailster_options[kickbox_apikey]" value="<?php echo esc_attr( mailster_option( 'kickbox_apikey' ) ); ?>" class="large-text"></p></td>
 		</tr>
-		<?php if ( null != mailster_option( 'kickboxio_balance' ) ) : ?>
+		<?php if ( null != mailster_option( 'kickbox_balance' ) ) : ?>
 		<tr valign="top">
 			<th scope="row"><?php _e( 'Balance', 'mailster_kickboxoi' ); ?></th>
-			<td><input type="hidden" name="mailster_options[kickboxio_balance]" value="<?php echo esc_attr( mailster_option( 'kickboxio_balance' ) ); ?>"><p><?php echo sprintf( __( 'You have %d credits left', 'mailster-kickboxio' ), mailster_option( 'kickboxio_balance' ) ); ?></p></td>
+			<td><input type="hidden" name="mailster_options[kickbox_balance]" value="<?php echo esc_attr( mailster_option( 'kickbox_balance' ) ); ?>"><p><?php echo sprintf( __( 'You have %d credits left', 'mailster-kickbox' ), mailster_option( 'kickbox_balance' ) ); ?></p></td>
 		</tr>
 		<?php endif; ?>
 		<tr valign="top">
 			<th scope="row"><?php _e( 'Timeout', 'mailster_kickboxoi' ); ?></th>
-			<td><p><input type="text" name="mailster_options[kickboxio_timeout]" value="<?php echo esc_attr( mailster_option( 'kickboxio_timeout' ) ); ?>" class="small-text"> Milliseconds</p></td>
+			<td><p><input type="text" name="mailster_options[kickbox_timeout]" value="<?php echo esc_attr( mailster_option( 'kickbox_timeout' ) ); ?>" class="small-text"> Milliseconds</p></td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><?php _e( 'Import', 'mailster_kickboxoi' ); ?></th>
-			<td><p><label><input type="hidden" name="mailster_options[kickboxio_import]" value=""><input type="checkbox" name="mailster_options[kickboxio_import]" value="1" <?php checked( mailster_option( 'kickboxio_import' ) ); ?>> use for import</label></p>
-			<p class="description">This will significantly decrease import time because for every subscriber WordPress needs to verify the email on the kickbox.io server. It's better to use the <a href="https://kickbox.io/app/verify" class="external">list verification</a> to verify large lists.</p>
+			<td><p><label><input type="hidden" name="mailster_options[kickbox_import]" value=""><input type="checkbox" name="mailster_options[kickbox_import]" value="1" <?php checked( mailster_option( 'kickbox_import' ) ); ?>> use for import</label></p>
+			<p class="description">This will significantly decrease import time because for every subscriber WordPress needs to verify the email on the kickbox.com server. It's better to use the <a href="https://kickbox.com/app/verify" class="external">list verification</a> to verify large lists.</p>
 				</td>
 		</tr>
 	</table>
 	<h3>Rules</h3>
-	<p class="description">You can define rules when you accept an email address and when you don't. All rules are based on the API response by kickbox.io. Please check their <a href="http://docs.kickbox.io/docs/using-the-api" class="external">API documentation</a> for more info.</p>
+	<p class="description">You can define rules when you accept an email address and when you don't. All rules are based on the API response by kickbox.com. Please check their <a href="http://docs.kickbox.com/docs/using-the-api" class="external">API documentation</a> for more info.</p>
 	<p class="description">By default the given options are fine and can be kept. If you have special needs feel free to adopt them.</p>
 	<table class="form-table">
 		<tr valign="top">
@@ -225,13 +225,13 @@ class MailsterKickBoxIO {
 			'unknown'       => 'unknown',
 		);
 
-		$checked = mailster_option( 'kickboxio_response', array() );
+		$checked = mailster_option( 'kickbox_response', array() );
 		foreach ( $reasons as $code => $reason ) {
-			echo '<p><label><input type="checkbox" name="mailster_options[kickboxio_response][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
+			echo '<p><label><input type="checkbox" name="mailster_options[kickbox_response][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
 		}
 		?>
 			<p><strong><?php _e( 'Error Message if rule doesn\'t match', 'mailster_kickboxoi' ); ?></strong>
-			<input type="text" name="mailster_options[kickboxio_response_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_response_error' ) ); ?>" class="large-text"></p>
+			<input type="text" name="mailster_options[kickbox_response_error]" value="<?php echo esc_attr( mailster_option( 'kickbox_response_error' ) ); ?>" class="large-text"></p>
 			</td>
 		</tr>
 		<tr valign="top">
@@ -253,26 +253,26 @@ class MailsterKickBoxIO {
 			'unexpected_error'   => 'An unexpected error has occurred',
 		);
 
-		$checked = mailster_option( 'kickboxio_reasons', array() );
+		$checked = mailster_option( 'kickbox_reasons', array() );
 		foreach ( $reasons as $code => $reason ) {
-			echo '<p><label><input type="checkbox" name="mailster_options[kickboxio_reasons][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
+			echo '<p><label><input type="checkbox" name="mailster_options[kickbox_reasons][]" value="' . esc_attr( $code ) . '" ' . checked( in_array( $code, $checked ), true, false ) . '><code>[' . $code . ']</code> ' . esc_attr( $reason ) . '</label></p>';
 		}
 		?>
 			<p><strong><?php _e( 'Error Message if rule doesn\'t match', 'mailster_kickboxoi' ); ?></strong>
-			<input type="text" name="mailster_options[kickboxio_reasons_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_reasons_error' ) ); ?>" class="large-text"></p>
+			<input type="text" name="mailster_options[kickbox_reasons_error]" value="<?php echo esc_attr( mailster_option( 'kickbox_reasons_error' ) ); ?>" class="large-text"></p>
 			</td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><?php _e( 'Accept email address if', 'mailster_kickboxoi' ); ?></th>
 			<td>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_role]" value="1" <?php checked( mailster_option( 'kickboxio_role' ) ); ?>> is a role address (postmaster@example.com, support@example.com, etc)</label></p>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_free]" value="1" <?php checked( mailster_option( 'kickboxio_free' ) ); ?>> uses a free email service like gmail.com or yahoo.com.</label></p>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_disposable]" value="1" <?php checked( mailster_option( 'kickboxio_disposable' ) ); ?>> uses a disposable domain like trashmail.com or mailinator.com.</label></p>
-			<p><label><input type="checkbox" name="mailster_options[kickboxio_accept_all]" value="1" <?php checked( mailster_option( 'kickboxio_accept_all' ) ); ?>>was accepted, but the domain appears to accept all emails addressed to that domain</label></p>
-			<p><a href="http://docs.kickbox.io/v2.0/docs/the-sendex" class="external">Sendex score</a> is at least<input type="text" name="mailster_options[kickboxio_sendex]" value="<?php echo floatval( mailster_option( 'kickboxio_sendex' ) ); ?>" class="small-text"></p>
+			<p><label><input type="checkbox" name="mailster_options[kickbox_role]" value="1" <?php checked( mailster_option( 'kickbox_role' ) ); ?>> is a role address (postmaster@example.com, support@example.com, etc)</label></p>
+			<p><label><input type="checkbox" name="mailster_options[kickbox_free]" value="1" <?php checked( mailster_option( 'kickbox_free' ) ); ?>> uses a free email service like gmail.com or yahoo.com.</label></p>
+			<p><label><input type="checkbox" name="mailster_options[kickbox_disposable]" value="1" <?php checked( mailster_option( 'kickbox_disposable' ) ); ?>> uses a disposable domain like trashmail.com or mailinator.com.</label></p>
+			<p><label><input type="checkbox" name="mailster_options[kickbox_accept_all]" value="1" <?php checked( mailster_option( 'kickbox_accept_all' ) ); ?>>was accepted, but the domain appears to accept all emails addressed to that domain</label></p>
+			<p><a href="https://docs.kickbox.com/docs/the-sendex" class="external">Sendex score</a> is at least<input type="text" name="mailster_options[kickbox_sendex]" value="<?php echo floatval( mailster_option( 'kickbox_sendex' ) ); ?>" class="small-text"></p>
 
 			<p><strong><?php _e( 'Error Message if rule doesn\'t match', 'mailster_kickboxoi' ); ?></strong>
-			<input type="text" name="mailster_options[kickboxio_error]" value="<?php echo esc_attr( mailster_option( 'kickboxio_error' ) ); ?>" class="large-text"></p>
+			<input type="text" name="mailster_options[kickbox_error]" value="<?php echo esc_attr( mailster_option( 'kickbox_error' ) ); ?>" class="large-text"></p>
 			</td>
 			</td>
 		</tr>
@@ -286,7 +286,7 @@ class MailsterKickBoxIO {
 		?>
 	<div id="message" class="error">
 	  <p>
-	   <strong>Kickbox.io for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox.io+Integration&utm_medium=plugin">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_KICKBOXIO_REQUIRED_VERSION; ?></strong>. Plugin deactivated.
+	   <strong>Kickbox for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox+Integration&utm_medium=plugin">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_KICKBOX_REQUIRED_VERSION; ?></strong>. Plugin deactivated.
 	  </p>
 	</div>
 		<?php
