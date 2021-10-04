@@ -14,7 +14,7 @@ License: GPLv2 or later
 define( 'MAILSTER_KICKBOX_VERSION', '1.1' );
 define( 'MAILSTER_KICKBOX_REQUIRED_VERSION', '2.2' );
 
-class MailsterKickBoxIO {
+class MailsterKickBox {
 
 	private $plugin_path;
 	private $plugin_url;
@@ -295,4 +295,4 @@ class MailsterKickBoxIO {
 
 }
 
-new MailsterKickBoxIO();
+new MailsterKickBox();
