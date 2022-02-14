@@ -4,7 +4,7 @@ Contributors: everpress
 Tags: mailster, newsletter, email, verification, kickbox  
 Requires at least: 3.8  
 Tested up to: 5.9  
-Stable tag: 1.1  
+Stable tag: 1.2
 License: GPLv2 or later
 
 ## Description
@@ -21,6 +21,10 @@ Verifies your subscribers email addresses with kickbox.com
 4. Enter your credentials
 
 ## Changelog
+
+### 1.2
+
+-   Code refactor
 
 ### 1.1
 
