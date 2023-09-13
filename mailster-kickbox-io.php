@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Mailster Kickbox
-Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Kickbox+Integration&utm_medium=plugin
+Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=plugin&utm_term=Kickbox
 Description: Verifies your subscribers email addresses with Kickbox
 Version: 1.2
 Author: EverPress
