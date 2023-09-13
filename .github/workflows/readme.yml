@@ -7,12 +7,12 @@ on:
       - 'README.md'
       - '.wordpress-org/**'
 jobs:
-  trunk:
+  readme:
     name: Update Assets and Readme
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: evrpress/action-wordpress-plugin-readme-screenshot-update@main
+      - uses: evrpress/action-wordpress-plugin-readme-screenshot-update@develop
       - name: WordPress.org plugin asset/readme update
         uses: evrpress/action-wordpress-plugin-asset-update@develop
         env:
