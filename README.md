@@ -3,7 +3,7 @@
 Contributors: everpress, xaverb  
 Tags: mailster, newsletter, email, verification, kickbox  
 Requires at least: 3.8  
-Tested up to: 6.2  
+Tested up to: 6.3  
 Stable tag: 1.2
 License: GPLv2 or later
 
