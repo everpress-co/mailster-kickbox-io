@@ -3,7 +3,7 @@
 Contributors: everpress, xaverb  
 Tags: mailster, newsletter, email, verification, kickbox  
 Requires at least: 3.8  
-Tested up to: 6.0  
+Tested up to: 6.3  
 Stable tag: 1.2
 License: GPLv2 or later
 
@@ -24,15 +24,15 @@ Verifies your subscribers email addresses with kickbox.com
 
 ### 1.2
 
--   Code refactor
+- Code refactor
 
 ### 1.1
 
--   Updated name to Kickbox
+- Updated name to Kickbox
 
 ### 1.0
 
--   initial release
+- initial release
 
 ## Additional Info
 
