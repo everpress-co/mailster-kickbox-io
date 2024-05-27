@@ -1,9 +1,9 @@
 # Mailster Kickbox
 
-Contributors: everpress, xaverb  
+Contributors: everpress, mailster, xaverb  
 Tags: mailster, newsletter, email, verification, kickbox  
-Requires at least: 3.8  
-Tested up to: 6.3  
+Requires at least: 6.0  
+Tested up to: 6.5  
 Stable tag: 1.2
 License: GPLv2 or later
 
