@@ -13,7 +13,6 @@
  * @package Mailster_Kickbox
  */
 
-
 define( 'MAILSTER_KICKBOX_VERSION', '1.2.0' );
 define( 'MAILSTER_KICKBOX_REQUIRED_VERSION', '4.0' );
 define( 'MAILSTER_KICKBOX_FILE', __FILE__ );
