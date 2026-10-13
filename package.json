@@ -1,0 +1,36 @@
+{
+	"name": "mailster-kickbox-io",
+	"version": "1.2.1",
+	"description": "Verifies your subscribers email addresses with Kickbox.",
+	"author": "everpress",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"kickbox",
+		"mailster",
+		"newsletter",
+		"email",
+		"verification"
+	],
+	"homepage": "https://mailster.co",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/everpress-co/mailster-kickbox-io.git"
+	},
+	"bugs": {
+		"url": "https://github.com/everpress-co/mailster-kickbox-io/issues"
+	},
+	"files": [
+		"*.php",
+		"classes",
+		"readme.txt"
+	],
+	"devDependencies": {
+		"@wordpress/scripts": "^36.1.0"
+	},
+	"scripts": {
+		"lint": "npm run lint:pkg-json",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip"
+	}
+}
