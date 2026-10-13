@@ -3,8 +3,8 @@
 Contributors: everpress, mailster, xaverb  
 Tags: mailster, newsletter, email, verification, kickbox  
 Requires at least: 6.0  
-Tested up to: 6.5  
-Stable tag: 1.2.0
+Tested up to: 7.1  
+Stable tag: 1.2.1
 License: GPLv2 or later
 
 ## Description
@@ -21,7 +21,11 @@ Verifies your subscribers' email addresses with [Kickbox](https://kickbox.com).
 
 ## Changelog
 
-### Unreleased
+### 1.2.1
+
+- Requires Mailster 4.0 or newer
+- Code quality and WordPress coding standards improvements
+- Fixed text domain consistency for translations
 
 ### 1.2.0
 
