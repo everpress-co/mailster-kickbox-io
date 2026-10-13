@@ -1,15 +1,9 @@
 name: Create Release
 
-# Slack (GitHub app): this channel should only post releases.
-# A bare /github subscribe turns on issues, pulls, commits, releases, and deployments.
-# Unsubscribe from all of those first, then subscribe to releases only:
-# /github unsubscribe evrpress/mailster-kickbox-io
-# /github subscribe evrpress/mailster-kickbox-io releases
-
 on:
   push:
     tags:
-      - "*"
+      - '*'
 
 permissions:
   contents: write
@@ -31,7 +25,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: '24'
           cache: npm
 
       - name: CI gate

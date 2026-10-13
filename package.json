@@ -14,10 +14,10 @@
 	"homepage": "https://mailster.co",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/evrpress/mailster-kickbox-io.git"
+		"url": "https://github.com/everpress-co/mailster-kickbox-io.git"
 	},
 	"bugs": {
-		"url": "https://github.com/evrpress/mailster-kickbox-io/issues"
+		"url": "https://github.com/everpress-co/mailster-kickbox-io/issues"
 	},
 	"files": [
 		"*.php",
