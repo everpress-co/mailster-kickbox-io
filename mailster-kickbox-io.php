@@ -3,7 +3,7 @@
  * Plugin Name: Mailster Kickbox
  * Requires Plugins: mailster
  * Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=plugin&utm_term=Kickbox
- * Description: Verifies your subscribers email addresses with Kickbox
+ * Description: Verify Mailster subscribers with Kickbox email verification to reduce bounces and improve deliverability.
  * Version: 1.2.1
  * Author: EverPress
  * Author URI: https://mailster.co
