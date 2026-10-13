@@ -1,10 +1,40 @@
 <?php
+/**
+ * Mailster Kickbox integration class.
+ *
+ * @package Mailster_Kickbox
+ */
 
+/**
+ * Verifies subscriber email addresses via the Kickbox API.
+ *
+ * @since 1.0
+ */
 class MailsterKickBox {
 
+	/**
+	 * Absolute filesystem path to the plugin directory.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	private $plugin_path;
+
+	/**
+	 * URL to the plugin directory.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	private $plugin_url;
 
+	/**
+	 * Sets up paths, activation hooks, and init callbacks.
+	 *
+	 * @since 1.0
+	 */
 	public function __construct() {
 
 		$this->plugin_path = plugin_dir_path( MAILSTER_KICKBOX_FILE );
@@ -18,6 +48,14 @@ class MailsterKickBox {
 		add_action( 'init', array( &$this, 'init' ), 1 );
 	}
 
+	/**
+	 * Seeds default Kickbox options and shows a setup notice on activation.
+	 *
+	 * @since 1.0
+	 *
+	 * @param bool $network_wide Optional. Whether the plugin is network-activated. Default false.
+	 * @return void
+	 */
 	public function activate( $network_wide ) {
 
 		if ( function_exists( 'mailster' ) ) {
@@ -48,9 +86,24 @@ class MailsterKickBox {
 
 	}
 
+	/**
+	 * Runs on plugin deactivation.
+	 *
+	 * @since 1.0
+	 *
+	 * @param bool $network_wide Optional. Whether the plugin was network-activated. Default false.
+	 * @return void
+	 */
 	public function deactivate( $network_wide ) {}
 
 
+	/**
+	 * Registers admin settings and subscriber verification when Mailster is active.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function init() {
 
 		if ( ! function_exists( 'mailster' ) ) {
@@ -72,6 +125,16 @@ class MailsterKickBox {
 
 	}
 
+	/**
+	 * Verifies a subscriber entry email against Kickbox before it is saved.
+	 *
+	 * Skips verification during bulk import unless the import option is enabled.
+	 *
+	 * @since 1.0
+	 *
+	 * @param array $entry Subscriber entry data.
+	 * @return array|WP_Error Unmodified entry on success, or a WP_Error on rejection.
+	 */
 	public function verify_subscriber( $entry ) {
 
 		if ( ! isset( $entry['email'] ) ) {
@@ -90,6 +153,14 @@ class MailsterKickBox {
 
 	}
 
+	/**
+	 * Calls the Kickbox API and applies configured acceptance rules.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $email Email address to verify.
+	 * @return bool|WP_Error True when accepted, or a WP_Error when rejected by a rule.
+	 */
 	public function verify( $email ) {
 
 		$endpoint = 'https://api.kickbox.com/v2/verify';
@@ -160,6 +231,14 @@ class MailsterKickBox {
 
 	}
 
+	/**
+	 * Inserts the Kickbox settings section into Mailster settings tabs.
+	 *
+	 * @since 1.0
+	 *
+	 * @param array $settings Existing settings section map.
+	 * @return array Modified settings sections including Kickbox.
+	 */
 	public function settings_tab( $settings ) {
 
 		$position = 3;
@@ -171,6 +250,13 @@ class MailsterKickBox {
 	}
 
 
+	/**
+	 * Renders the Kickbox settings section fields.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function settings() {
 
 		?>
@@ -268,6 +354,13 @@ class MailsterKickBox {
 	}
 
 
+	/**
+	 * Prints an admin notice when Mailster is missing or too old.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function notice() {
 		?>
 	<div id="message" class="error">
