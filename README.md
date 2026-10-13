@@ -22,6 +22,8 @@ Verifies your subscribers email addresses with kickbox.com
 
 ## Changelog
 
+### Unreleased
+
 ### 1.2.0
 
 - Code refactor
