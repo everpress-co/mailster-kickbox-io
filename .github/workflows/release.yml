@@ -3,8 +3,8 @@ name: Create Release
 # Slack (GitHub app): this channel should only post releases.
 # A bare /github subscribe turns on issues, pulls, commits, releases, and deployments.
 # Unsubscribe from all of those first, then subscribe to releases only:
-# /github unsubscribe everpress-co/mailster-kickbox-io
-# /github subscribe everpress-co/mailster-kickbox-io releases
+# /github unsubscribe evrpress/mailster-kickbox-io
+# /github subscribe evrpress/mailster-kickbox-io releases
 
 on:
   push:
